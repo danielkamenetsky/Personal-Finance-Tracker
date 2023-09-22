@@ -56,7 +56,13 @@ class User:
             'Balance': self.__balance
         }
 
+    def check_password(self, password):
+        # Check if the given password matches the user's password
+        return self.__password == password
 
+    @property
+    def username(self):
+        return self.__username
 # Transaction Class
 
 # Class represents a financial transaction
@@ -103,30 +109,55 @@ class Expense(Transaction):
         return False
 
 
-# Test
-# Create a user
-daniel = User("danielkamenetsky", "securepassword")
+class System:
+    def __init__(self):
+        self.__users = {}  # Dictionary to store users, with username as key and User object as value
 
-# Add income and expense transactions
-daniel.add_transaction(Income(5000, "Monthly Salary", "Salary"))
-daniel.add_transaction(Expense(50, "Lunch", "Food"))
-daniel.add_transaction(Expense(200, "Shoes", "Shopping"))
-daniel.add_transaction(Income(100, "Gift", "Gifts"))
+    def register(self, username, password):
+        if username in self.__users:
+            print("Username already exists!")
+            return None
+        user = User(username, password)
+        self.__users[username] = user
+        print(f"User {username} registered successfully!")
+        return user
 
-# View transactions
-for transaction in daniel.view_transactions():
-    print(transaction)
+    def login(self, username, password):
+        user = self.__users.get(username)
+        if not user:
+            print("User not found!")
+            return None
+        # assuming you have a method in User class to check password
+        if user.check_password(password):
+            print(f"Welcome {username}!")
+            return user
+        else:
+            print("Incorrect password!")
+            return None
+# # Test
+# # Create a user
+# daniel = User("danielkamenetsky", "securepassword")
 
-# Check balance
-print(f"Current Balance: ${daniel.get_balance()}")
+# # Add income and expense transactions
+# daniel.add_transaction(Income(5000, "Monthly Salary", "Salary"))
+# daniel.add_transaction(Expense(50, "Lunch", "Food"))
+# daniel.add_transaction(Expense(200, "Shoes", "Shopping"))
+# daniel.add_transaction(Income(100, "Gift", "Gifts"))
 
-# Display a summary
-summary = daniel.summary()
-for key, value in summary.items():
-    print(f"{key}: ${value}")
+# # View transactions
+# for transaction in daniel.view_transactions():
+#     print(transaction)
 
-# Test viewing transactions by category
-food_transactions = daniel.view_transactions_by_category("Food")
-print("\nFood Transactions:")
-for transaction in food_transactions:
-    print(transaction)
+# # Check balance
+# print(f"Current Balance: ${daniel.get_balance()}")
+
+# # Display a summary
+# summary = daniel.summary()
+# for key, value in summary.items():
+#     print(f"{key}: ${value}")
+
+# # Test viewing transactions by category
+# food_transactions = daniel.view_transactions_by_category("Food")
+# print("\nFood Transactions:")
+# for transaction in food_transactions:
+#     print(transaction)
