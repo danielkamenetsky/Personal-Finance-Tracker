@@ -83,6 +83,11 @@ class Income(Transaction):
     def __str__(self):
         return f"Income ({self.category}) - {super().__str__()}"
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.amount == other.amount and self.description == other.description and self.category == other.category
+        return False
+
 
 class Expense(Transaction):
     def __init__(self, amount, description, category):
@@ -91,6 +96,11 @@ class Expense(Transaction):
 
     def __str__(self):
         return f"Expense ({self.category}) - {super().__str__()}"
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.amount == other.amount and self.description == other.description and self.category == other.category
+        return False
 
 
 # Test
