@@ -20,6 +20,18 @@ class User:
     def view_transactions(self):
         return self.__transactions
 
+    def view_transactions_by_category(self, category):
+        # Start with an empty list for filtered transactions
+        filtered_transactions = []
+
+        # Go through each transaction in the user's transactions
+        for t in self.__transactions:
+            # Check if the transaction has a category and if that category matches the one we're looking for
+            if hasattr(t, 'category') and t.category == category:
+                # If it does, add it to our filtered transactions list
+                filtered_transactions.append(t)
+        return filtered_transactions
+
     def get_balance(self):
         # Return the current balance
         return self.__balance
@@ -79,3 +91,32 @@ class Expense(Transaction):
 
     def __str__(self):
         return f"Expense ({self.category}) - {super().__str__()}"
+
+
+# Test
+# Create a user
+daniel = User("danielkamenetsky", "securepassword")
+
+# Add income and expense transactions
+daniel.add_transaction(Income(5000, "Monthly Salary", "Salary"))
+daniel.add_transaction(Expense(50, "Lunch", "Food"))
+daniel.add_transaction(Expense(200, "Shoes", "Shopping"))
+daniel.add_transaction(Income(100, "Gift", "Gifts"))
+
+# View transactions
+for transaction in daniel.view_transactions():
+    print(transaction)
+
+# Check balance
+print(f"Current Balance: ${daniel.get_balance()}")
+
+# Display a summary
+summary = daniel.summary()
+for key, value in summary.items():
+    print(f"{key}: ${value}")
+
+# Test viewing transactions by category
+food_transactions = daniel.view_transactions_by_category("Food")
+print("\nFood Transactions:")
+for transaction in food_transactions:
+    print(transaction)
