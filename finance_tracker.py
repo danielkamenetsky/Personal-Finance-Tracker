@@ -5,14 +5,45 @@ class User:
         self.__username = username
         self.__password = password
         self.__transactions = []
+        self.__balance = 0  # Initialize balance to 0
     # This method allows a user to add a transaction to their list of transactions.
 
     def add_transaction(self, transaction):
         self.__transactions.append(transaction)
+        # Update balance based on transaction type
+        if isinstance(transaction, Income):
+            self.__balance += transaction.amount
+        elif isinstance(transaction, Expense):
+            self.__balance -= transaction.amount
     # View all the transactions
 
     def view_transactions(self):
         return self.__transactions
+
+    def get_balance(self):
+        # Return the current balance
+        return self.__balance
+
+    # Calculate total income and expense
+    def summary(self):
+        total_income = 0
+        total_expense = 0
+
+        # Loop through each transaction
+        for transaction in self.__transactions:
+            # Check if the transaction is of type Income
+            if isinstance(transaction, Income):
+                total_income += transaction.amount
+            # Check if the transaction is of type Expense
+            elif isinstance(transaction, Expense):
+                total_expense += transaction.amount
+
+        return {
+            'Total Income': total_income,
+            'Total Expense': total_expense,
+            'Balance': self.__balance
+        }
+
 
 # Transaction Class
 
