@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from app import System
 from app import Income, Expense
 
@@ -36,6 +36,9 @@ def register():
         if user:
             session['username'] = user.username
             return redirect(url_for('dashboard'))
+        else:
+            flash("Username already exists!")
+            return render_template('register.html')
     return render_template('register.html')
 
 
@@ -69,6 +72,31 @@ def demo():
 @app.route('/about')
 def about():
     return render_template('documentation.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if 'username' in session:
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = system.login(username, password)
+        if user:
+            session['username'] = user.username
+            return redirect(url_for('dashboard'))
+        else:
+            flash("Invalid username or password")
+            return render_template('login.html')
+
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
