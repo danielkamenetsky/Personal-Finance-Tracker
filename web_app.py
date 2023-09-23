@@ -99,6 +99,38 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/add_income', methods=['GET', 'POST'])
+def add_income():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        amount = float(request.form['amount'])
+        description = request.form['description']
+        category = request.form['category']
+        user = system.get_user(session['username'])
+        user.add_income(amount, description, category)
+        return redirect(url_for('dashboard'))
+
+    return render_template('add_income.html')
+
+
+@app.route('/add_expense', methods=['GET', 'POST'])
+def add_expense():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        amount = float(request.form['amount'])
+        description = request.form['description']
+        category = request.form['category']
+        user = system.get_user(session['username'])
+        user.add_expense(amount, description, category)
+        return redirect(url_for('dashboard'))
+
+    return render_template('add_expense.html')
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
