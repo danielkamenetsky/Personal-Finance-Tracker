@@ -134,6 +134,10 @@ class System:
         else:
             print("Incorrect password!")
             return None
+
+    def get_user(self, username):
+        # Retrieve a User object by username
+        return self.users.get(username)
 # # Test
 # # Create a user
 # daniel = User("danielkamenetsky", "securepassword")

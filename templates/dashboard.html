@@ -4,7 +4,14 @@
     <title>Dashboard</title>
   </head>
   <body>
-    <h1>Welcome to the Personal Finance Tracker, {{ username }}</h1>
-    <h2>Balance: ${{ balance }}</h2>
+    <h1>Welcome, {{ username }}</h1>
+    <h2>Balance: ${{ summary['Balance'] }}</h2>
+
+    <h3>Transactions:</h3>
+    <ul>
+      {% for transaction in transactions %}
+      <li>{{ transaction }}</li>
+      {% endfor %}
+    </ul>
   </body>
 </html>
