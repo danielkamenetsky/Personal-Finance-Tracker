@@ -65,7 +65,7 @@ def demo():
     }
     transactions = [Income(5000, "Salary", "Work"),
                     Expense(50, "Lunch", "Food")]
-
+    session['demo_mode'] = True
     return render_template('dashboard.html', username=username, summary=summary, transactions=transactions)
 
 
@@ -101,33 +101,33 @@ def logout():
 
 @app.route('/add_income', methods=['GET', 'POST'])
 def add_income():
-    if 'username' not in session:
+    if 'username' not in session and 'demo_mode' not in session:
+        flash("Please login first.")
         return redirect(url_for('login'))
-
     if request.method == 'POST':
-        amount = float(request.form['amount'])
+        amount = request.form['amount']
         description = request.form['description']
         category = request.form['category']
         user = system.get_user(session['username'])
-        user.add_income(amount, description, category)
+        user.add_income(float(amount), description, category)
+        flash("Income added successfully!")
         return redirect(url_for('dashboard'))
-
     return render_template('add_income.html')
 
 
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
-    if 'username' not in session:
+    if 'username' not in session and 'demo_mode' not in session:
+        flash("Please login first.")
         return redirect(url_for('login'))
-
     if request.method == 'POST':
-        amount = float(request.form['amount'])
+        amount = request.form['amount']
         description = request.form['description']
         category = request.form['category']
         user = system.get_user(session['username'])
-        user.add_expense(amount, description, category)
+        user.add_expense(float(amount), description, category)
+        flash("Expense added successfully!")
         return redirect(url_for('dashboard'))
-
     return render_template('add_expense.html')
 
 
